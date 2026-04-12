@@ -10,16 +10,24 @@ router.get("/random-number", async function (req, res) {
   const { min, max } = req.query;
   const minNumber = Number(min);
   const maxNumber = Number(max);
-  const isOneUndefined = min === undefined || max === undefined;
+  const isSomeUndefined = min === undefined || max === undefined;
   const isMinBiggerMax = minNumber > maxNumber;
-  const isNotInteger = minNumber % 1 !== 0 || maxNumber % 1 !== 0;
+  const isSomeNotInteger = minNumber % 1 !== 0 || maxNumber % 1 !== 0;
 
-  if (isOneUndefined || isMinBiggerMax || isNotInteger) {
+  if (isSomeUndefined || isMinBiggerMax || isSomeNotInteger) {
     return res.status(STATUS_CODES.BAD_REQUEST).send(MESSAGES.BAD_REQUEST);
   }
   res.json({
     action: "random-number",
     random: `випадкове ціле число від ${min} до ${max}`,
+  });
+});
+
+router.get("/time", (req, res) => {
+  const today = new Date();
+  res.json({
+    action: "time",
+    "date-time": today.toISOString(),
   });
 });
 
