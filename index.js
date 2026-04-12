@@ -5,7 +5,7 @@ dotenv.config();
 import logger from "morgan";
 
 //! import routes
-import { homeRouter } from "./routes/index.js";
+import { homeRouter, apiRouter } from "./routes/index.js";
 import { ROUTES } from "./common/index.js";
 
 import { notFoundHandler } from "./middleware/index.js";
@@ -16,6 +16,8 @@ const PORT = process.env.PORT || 3000;
 app.use(logger("tiny"));
 
 app.use(ROUTES.HOME, homeRouter);
+
+app.use(ROUTES.API, apiRouter);
 
 app.use(notFoundHandler);
 
