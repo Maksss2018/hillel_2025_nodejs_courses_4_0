@@ -19,9 +19,12 @@ router.get("/random-number", async function (req, res) {
   if (isSomeUndefined || isMinBiggerMax || isSomeNotInteger) {
     return res.status(STATUS_CODES.BAD_REQUEST).send(MESSAGES.BAD_REQUEST);
   }
+  const randomNumber =
+    Math.floor(Math.random() * (maxNumber - minNumber + 1)) + minNumber;
+
   res.json({
     action: "random-number",
-    random: `випадкове ціле число від ${min} до ${max}`,
+    random: `випадкове ціле число ${randomNumber} від ${min} до ${max}`,
   });
 });
 
