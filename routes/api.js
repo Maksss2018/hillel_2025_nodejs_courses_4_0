@@ -70,4 +70,19 @@ router.get("/password", (req, res) => {
   });
 });
 
+router
+  .route("/test")
+  .get((req, res) => {
+    res.json({
+      url: "http://localhost/api/test",
+      method: "GET",
+    });
+  })
+  .post((req, res) => {
+    res.json({
+      url: "http://localhost/api/test",
+      method: "POST",
+    });
+  });
+
 export default router;
