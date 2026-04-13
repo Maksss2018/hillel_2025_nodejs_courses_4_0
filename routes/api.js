@@ -3,6 +3,7 @@ import { STATUS_CODES, MESSAGES } from "../common/index.js";
 import generatePassword from "generate-password";
 
 const router = express.Router();
+const urlArr = [];
 
 router.get("/", async function (req, res) {
   res.send("api");
@@ -116,6 +117,41 @@ router.post("/card", (req, res) => {
   }, cardData);
 
   res.json(responsData);
+});
+
+router.post("/url", (req, res) => {
+  const { url } = req.query;
+
+  if (
+    !urlArr.some((itemUrl) => itemUrl === url) &&
+    url &&
+    url.trim().length > 0
+  ) {
+    urlArr.push(url);
+    res.json({
+      action: "url",
+      url: url,
+      result: "done",
+    });
+  } else {
+    res.status(STATUS_CODES.BAD_REQUEST).send(MESSAGES.BAD_REQUEST);
+  }
+
+  console.log(urlArr);
+});
+
+router.get("/url/:urlIndexStr", (req, res) => {
+  const { urlIndexStr } = req.params;
+  const urlIndexNumber = Number(urlIndexStr);
+  console.log(" urlArr[urlIndexNumber] = ", urlArr[urlIndexNumber]);
+  console.log(" urlArr = ", urlArr);
+  console.log(" urlIndexNumber = ", urlIndexNumber);
+  console.log(" urlIndexStr = ", urlIndexStr);
+  if (urlArr[urlIndexNumber] === undefined) {
+    return res.status(STATUS_CODES.BAD_REQUEST).send(MESSAGES.BAD_REQUEST);
+  }
+
+  res.redirect(`https://${urlArr[urlIndexNumber]}`);
 });
 
 export default router;
