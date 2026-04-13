@@ -13,6 +13,8 @@ import { notFoundHandler } from "./middleware/index.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(express.json());
+
 app.use(logger("tiny"));
 
 app.use(ROUTES.HOME, homeRouter);
@@ -20,5 +22,7 @@ app.use(ROUTES.HOME, homeRouter);
 app.use(ROUTES.API, apiRouter);
 
 app.use(notFoundHandler);
+
+//app.use(express.json());
 
 app.listen(PORT, () => console.log(`http://localhost:${PORT}`));

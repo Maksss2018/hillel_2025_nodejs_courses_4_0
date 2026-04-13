@@ -85,4 +85,11 @@ router
     });
   });
 
+router.post("/test-post", (req, res) => {
+  console.log(req.body);
+  res.json({
+    received: req.body,
+  });
+});
+
 export default router;
