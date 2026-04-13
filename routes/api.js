@@ -1,5 +1,7 @@
 import express from "express";
 import { STATUS_CODES, MESSAGES } from "../common/index.js";
+import generatePassword from "generate-password";
+
 const router = express.Router();
 
 router.get("/", async function (req, res) {
@@ -45,6 +47,23 @@ router.post("/timestemp/sec", (req, res) => {
   res.json({
     action: "timestamp",
     timestamp: todayInSeconds,
+  });
+});
+
+router.get("/password", (req, res) => {
+  const { length = 16 } = req.query;
+  if (length % 1 !== 0 && length > 0) {
+    return res.status(STATUS_CODES.BAD_REQUEST).send(MESSAGES.BAD_REQUEST);
+  }
+  const password = generatePassword.generate({
+    length: length,
+    numbers: true,
+  });
+
+  res.json({
+    action: "password",
+    length: length,
+    password: password,
   });
 });
 
