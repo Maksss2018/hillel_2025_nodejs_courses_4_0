@@ -31,4 +31,21 @@ router.get("/time", (req, res) => {
   });
 });
 
+router.post("/timestemp", (req, res) => {
+  const todayInMiliseconds = Date.now();
+  res.json({
+    action: "timestamp",
+    timestamp: todayInMiliseconds,
+  });
+});
+
+router.post("/timestemp/sec", (req, res) => {
+  const todayInMiliseconds = new Date();
+  const todayInSeconds = todayInMiliseconds / 1000;
+  res.json({
+    action: "timestamp",
+    timestamp: todayInSeconds,
+  });
+});
+
 export default router;
