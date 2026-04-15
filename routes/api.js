@@ -1,5 +1,6 @@
 import express from "express";
 import { STATUS_CODES, MESSAGES } from "../common/index.js";
+import { randomNumberGenerator, timeGetter } from "../utils/index.js";
 import generatePassword from "generate-password";
 
 const router = express.Router();
@@ -11,29 +12,7 @@ router.get("/", async function (req, res) {
 
 router.get("/random-number", async function (req, res) {
   const { min, max } = req.query;
-  let minNumber = Number(min);
-  let maxNumber = Number(max);
-  const isOnlyMin = max === undefined && min !== undefined;
-  const isOnlyMax = min === undefined && max !== undefined;
-  const isSomeUndefined = isOnlyMax || isOnlyMin;
-  const isEachUndefined = min === undefined && max === undefined;
-  const isMinBiggerMax = minNumber > maxNumber;
-  const isSomeNotInteger =
-    !Number.isInteger(minNumber) || !Number.isInteger(maxNumber);
-  if (isEachUndefined) {
-    minNumber = 0;
-    maxNumber = 10;
-  }
-
-  if (
-    !isEachUndefined &&
-    (isSomeUndefined || isMinBiggerMax || isSomeNotInteger)
-  ) {
-    return res.status(STATUS_CODES.BAD_REQUEST).send(MESSAGES.BAD_REQUEST);
-  }
-  const randomNumber =
-    Math.floor(Math.random() * (maxNumber - minNumber + 1)) + minNumber;
-
+  const randomNumber = randomNumberGenerator(min, max, res);
   res.json({
     action: "random-number",
     random: randomNumber,
@@ -41,15 +20,15 @@ router.get("/random-number", async function (req, res) {
 });
 
 router.get("/time", (req, res) => {
-  const today = new Date();
+  const todayInISO = timeGetter();
   res.json({
     action: "time",
-    "date-time": today.toISOString(),
+    "date-time": todayInISO,
   });
 });
 
 router.post("/timestamp", (req, res) => {
-  const todayInMiliseconds = Date.now();
+  const todayInMiliseconds = timeGetter("miliseconds");
   res.json({
     action: "timestamp",
     timestamp: todayInMiliseconds,
@@ -57,8 +36,7 @@ router.post("/timestamp", (req, res) => {
 });
 
 router.post("/timestamp/sec", (req, res) => {
-  const todayInMiliseconds = new Date();
-  const todayInSeconds = todayInMiliseconds / 1000;
+  const todayInSeconds = timeGetter("seconds");
   res.json({
     action: "timestamp",
     timestamp: todayInSeconds,
