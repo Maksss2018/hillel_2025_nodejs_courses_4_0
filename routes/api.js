@@ -13,22 +13,22 @@ router.get("/random-number", async function (req, res) {
   const { min, max } = req.query;
   let minNumber = Number(min);
   let maxNumber = Number(max);
-  const isEachUndefined = Number.isNaN(minNumber) && Number.isNaN(maxNumber);
   const isOnlyMin = max === undefined && min !== undefined;
   const isOnlyMax = min === undefined && max !== undefined;
   const isSomeUndefined = isOnlyMax || isOnlyMin;
+  const isEachUndefined = min === undefined && max === undefined;
   const isMinBiggerMax = minNumber > maxNumber;
   const isSomeNotInteger =
-    (!Number.isNaN(minNumber) && minNumber % 1 !== 0) ||
-    (!Number.isNaN(maxNumber) && maxNumber % 1 !== 0);
-  console.log(" minNumber % 1 =", minNumber % 1);
-  console.log(" minNumber  =", minNumber);
+    !Number.isInteger(minNumber) || !Number.isInteger(maxNumber);
   if (isEachUndefined) {
     minNumber = 0;
     maxNumber = 10;
   }
 
-  if (isSomeUndefined || isMinBiggerMax || isSomeNotInteger) {
+  if (
+    !isEachUndefined &&
+    (isSomeUndefined || isMinBiggerMax || isSomeNotInteger)
+  ) {
     return res.status(STATUS_CODES.BAD_REQUEST).send(MESSAGES.BAD_REQUEST);
   }
   const randomNumber =
