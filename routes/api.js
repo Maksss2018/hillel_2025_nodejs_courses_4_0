@@ -122,7 +122,7 @@ router.post("/card", (req, res) => {
     if (!acc.goods.some((goodsItem) => goodsItem === item[0])) {
       acc.goods.push(item[0]);
     }
-    acc.total_sum = acc.total_sum + item[1].price;
+    acc.total_sum = acc.total_sum + item[1].price * item[1].amount;
     acc.total_amount = acc.total_amount + item[1].amount;
     return acc;
   }, cardData);
