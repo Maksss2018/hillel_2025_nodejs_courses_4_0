@@ -48,7 +48,7 @@ router.get("/time", (req, res) => {
   });
 });
 
-router.post("/timestemp", (req, res) => {
+router.post("/timestamp", (req, res) => {
   const todayInMiliseconds = Date.now();
   res.json({
     action: "timestamp",
@@ -56,7 +56,7 @@ router.post("/timestemp", (req, res) => {
   });
 });
 
-router.post("/timestemp/sec", (req, res) => {
+router.post("/timestamp/sec", (req, res) => {
   const todayInMiliseconds = new Date();
   const todayInSeconds = todayInMiliseconds / 1000;
   res.json({
