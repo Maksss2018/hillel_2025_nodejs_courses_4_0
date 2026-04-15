@@ -1,6 +1,10 @@
 import express from "express";
 import { STATUS_CODES, MESSAGES } from "../common/index.js";
-import { randomNumberGenerator, timeGetter } from "../utils/index.js";
+import {
+  randomNumberGenerator,
+  timeGetter,
+  cardCalculator,
+} from "../utils/index.js";
 import generatePassword from "generate-password";
 
 const router = express.Router();
@@ -84,27 +88,7 @@ router.post("/test-post", (req, res) => {
 
 router.post("/card", (req, res) => {
   const receivedData = req.body;
-  const articul = generatePassword.generate({
-    length: 8,
-    numbers: true,
-  });
-
-  const cardData = {
-    articul: articul,
-    action: "cart",
-    total_amount: 0,
-    total_sum: 0,
-    goods: [],
-  };
-  const responsData = Object.entries(receivedData).reduce((acc, item) => {
-    if (!acc.goods.some((goodsItem) => goodsItem === item[0])) {
-      acc.goods.push(item[0]);
-    }
-    acc.total_sum = acc.total_sum + item[1].price * item[1].amount;
-    acc.total_amount = acc.total_amount + item[1].amount;
-    return acc;
-  }, cardData);
-
+  const responsData = cardCalculator(receivedData);
   res.json(responsData);
 });
 
